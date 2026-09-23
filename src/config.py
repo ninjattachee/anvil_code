@@ -6,3 +6,4 @@ import os
 # the user invoked iagent from, rather than the location of this package.
 WORKING_DIRECTORY = os.getcwd()
 MAX_CHARS = 10_000
+MAX_ITERATIONS = 20

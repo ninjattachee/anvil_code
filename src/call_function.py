@@ -13,9 +13,9 @@ from functions import get_file_content, get_files_info, run_python_file, write_f
 class ToolCallResult:
     """The result of executing a model-requested tool call."""
 
-    role: Literal["tool"]
+    type: Literal["function_call_output"]
     tool_call_id: str | None
-    content: str
+    output: str
 
 
 function_map: dict[str, Callable[..., str]] = {
@@ -40,10 +40,14 @@ def call_function(
     func = function_map.get(func_name)
     if func is None:
         return ToolCallResult(
-            role="tool",
+            type="function_call_output",
             tool_call_id=tool_call.id,
-            content=f"Error: Unknown function {func_name}",
+            output=f"Error: Unknown function {func_name}",
         )
 
     result = func(WORKING_DIRECTORY, **func_args)
-    return ToolCallResult(role="tool", tool_call_id=tool_call.id, content=result)
+    return ToolCallResult(
+        type="function_call_output",
+        tool_call_id=tool_call.id,
+        output=result,
+    )
