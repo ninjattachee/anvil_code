@@ -1,0 +1,20 @@
+[project]
+name = "iagent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Atank", email = "atank@atank.org" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "openai==2.44.0",
+    "python-dotenv==1.1.0",
+]
+
+[project.scripts]
+iagent = "iagent:main"
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
