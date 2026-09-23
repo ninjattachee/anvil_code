@@ -4,6 +4,7 @@ schema_get_files_info: FunctionToolParam = {
     "type": "function",
     "name": "get_files_info",
     "description": "Get information about files in the repository",
+    "strict": True,
     "parameters": {
         "type": "object",
         "properties": {
@@ -12,15 +13,16 @@ schema_get_files_info: FunctionToolParam = {
                 "description": "The directory to search for files (default is '.')"
             }
         },
+        "additionalProperties": False,
+        "required": ["directory"],
     },
-    "additionalProperties": False,
-    "required": ["directory"]
 }
 
 schema_get_file_content: FunctionToolParam = {
     "type": "function",
     "name": "get_file_content",
     "description": "Get the content of a file",
+    "strict": True,
     "parameters": {
         "type": "object",
         "properties": {
@@ -29,15 +31,16 @@ schema_get_file_content: FunctionToolParam = {
                 "description": "The path to the file"
             }
         },
+        "additionalProperties": False,
+        "required": ["file_path"],
     },
-    "additionalProperties": False,
-    "required": ["file_path"]
 }
 
 schema_write_file: FunctionToolParam = {
     "type": "function",
     "name": "write_file",
     "description": "Write content to a file",
+    "strict": True,
     "parameters": {
         "type": "object",
         "properties": {
@@ -50,15 +53,16 @@ schema_write_file: FunctionToolParam = {
                 "description": "The content to write to the file"
             }
         },
+        "additionalProperties": False,
+        "required": ["file_path", "content"],
     },
-    "additionalProperties": False,
-    "required": ["file_path", "content"]
 }
 
 schema_run_python_file: FunctionToolParam = {
     "type": "function",
     "name": "run_python_file",
     "description": "Run a Python file",
+    "strict": True,
     "parameters": {
         "type": "object",
         "properties": {
@@ -75,7 +79,7 @@ schema_run_python_file: FunctionToolParam = {
             }
 
         },
+        "additionalProperties": False,
+        "required": ["file_path"],
     },
-    "additionalProperties": False,
-    "required": ["file_path"]
 }
