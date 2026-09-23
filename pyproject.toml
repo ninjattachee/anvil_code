@@ -1,7 +1,7 @@
 [project]
-name = "iagent"
+name = "anvil-code"
 version = "0.1.0"
-description = "Add your description here"
+description = "A simple toy code agent powered by OpenRouter"
 readme = "README.md"
 authors = [
     { name = "Atank", email = "atank@atank.org" }
@@ -13,7 +13,8 @@ dependencies = [
 ]
 
 [project.scripts]
-iagent = "iagent:main"
+anvil-code = "anvil_code.main:main"
+
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]

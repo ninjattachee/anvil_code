@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from openai.types.responses import ResponseFunctionToolCall
 
-from call_function import ToolCallResult, call_function
+from anvil_code.call_function import ToolCallResult, call_function
 
 
 class TestCallFunction(unittest.TestCase):
@@ -14,12 +14,12 @@ class TestCallFunction(unittest.TestCase):
             name="get_files_info", arguments='{"directory": "."}', id="call_123"
         )
 
-        with patch("call_function.function_map", {"get_files_info": lambda *_args, **_kwargs: "files"}):
+        with patch("anvil_code.call_function.function_map", {"get_files_info": lambda *_args, **_kwargs: "files"}):
             result = call_function(cast(ResponseFunctionToolCall, tool_call))
 
         self.assertEqual(
             result,
-            ToolCallResult(role="tool", tool_call_id="call_123", content="files"),
+            ToolCallResult(type="function_call_output", tool_call_id="call_123", output="files"),
         )
 
     def test_returns_structured_result_for_unknown_function(self):
@@ -30,9 +30,9 @@ class TestCallFunction(unittest.TestCase):
         self.assertEqual(
             result,
             ToolCallResult(
-                role="tool",
+                type="function_call_output",
                 tool_call_id="call_456",
-                content="Error: Unknown function missing",
+                output="Error: Unknown function missing",
             ),
         )
 

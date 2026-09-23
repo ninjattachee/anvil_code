@@ -1,14 +1,10 @@
-import importlib.util
+import importlib
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-MODULE_PATH = Path(__file__).with_name("write_file.py")
-SPEC = importlib.util.spec_from_file_location("write_file_module", MODULE_PATH)
-assert SPEC is not None and SPEC.loader is not None
-write_file_module = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(write_file_module)
+write_file_module = importlib.import_module("anvil_code.functions.write_file")
 write_file = write_file_module.write_file
 
 

@@ -5,8 +5,8 @@ from typing import Literal
 
 from openai.types.responses import ResponseFunctionToolCall
 
-from config import WORKING_DIRECTORY
-from functions import get_file_content, get_files_info, run_python_file, write_file
+from .config import WORKING_DIRECTORY
+from .functions import get_file_content, get_files_info, run_python_file, write_file
 
 
 @dataclass(frozen=True, slots=True)

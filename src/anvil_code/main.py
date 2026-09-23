@@ -6,10 +6,10 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 from openai.types.responses import ResponseInputParam, ToolParam
 
-from call_function import call_function
-from config import MAX_ITERATIONS
-from prompts import system_prompt
-from tools import (
+from .call_function import call_function
+from .config import MAX_ITERATIONS
+from .prompts import system_prompt
+from .tools import (
     schema_get_file_content,
     schema_get_files_info,
     schema_run_python_file,
@@ -31,9 +31,6 @@ def create_client():
     )
 
 
-client = create_client()
-
-
 @dataclass
 class ParsedArgs:
     user_prompt: str
@@ -42,8 +39,8 @@ class ParsedArgs:
 
 def parse_args() -> ParsedArgs:
     parser = argparse.ArgumentParser(
-        prog="iagent",
-        description="A CLI tool for interacting with OpenRouter AI models",
+        prog="anvil-code",
+        description="Anvil Code — a simple toy code agent",
         allow_abbrev=False,
     )
     parser.add_argument("user_prompt", type=str, help="The user prompt to send to the AI model")
@@ -55,10 +52,6 @@ def parse_args() -> ParsedArgs:
     )
 
 
-args = parse_args()
-
-context: ResponseInputParam = [{"role": "user", "content": args.user_prompt}]
-
 tools: Iterable[ToolParam] = [
     schema_get_files_info,
     schema_get_file_content,
@@ -67,7 +60,7 @@ tools: Iterable[ToolParam] = [
 ]
 
 
-def create_response(input_context: ResponseInputParam):
+def create_response(client, input_context: ResponseInputParam):
     return client.responses.create(
         model="openrouter/free",
         instructions=system_prompt,
@@ -84,10 +77,10 @@ def print_response(response, user_prompt: str, verbose: bool) -> None:
     else:
         print(response.output_text)
 
-def process_response_output(response) -> bool:
+def process_response_output(response, user_prompt: str, verbose: bool) -> bool:
     types = [item.type for item in response.output]
-    if not "function_call" in types:
-        print_response(response, user_prompt=args.user_prompt, verbose=args.verbose)
+    if "function_call" not in types:
+        print_response(response, user_prompt=user_prompt, verbose=verbose)
         return True
 
     for item in response.output:
@@ -98,7 +91,7 @@ def process_response_output(response) -> bool:
             print(f"message: content={item.content}")
     return False
 
-def update_context(response) -> None:
+def update_context(response, context: ResponseInputParam) -> None:
     for item in response.output:
         if item.type == "function_call":
             function_call_output = call_function(item)
@@ -107,18 +100,24 @@ def update_context(response) -> None:
             context.append({"role": "assistant", "content": item.content})
 
 
-def agent_loop() -> None:
-    done = False
+def agent_loop(client, user_prompt: str, verbose: bool) -> None:
+    context: ResponseInputParam = [{"role": "user", "content": user_prompt}]
     for _ in range(MAX_ITERATIONS):
-        response = create_response(context)
-        done = process_response_output(response)
+        response = create_response(client, context)
+        done = process_response_output(response, user_prompt, verbose)
         if done:
             return
-        update_context(response)
+        update_context(response, context)
 
     print("Failed to get a valid response after maximum iterations.")
     raise SystemExit(1)
 
 
+def main() -> None:
+    """Run the Anvil Code command-line application."""
+    args = parse_args()
+    agent_loop(create_client(), args.user_prompt, args.verbose)
+
+
 if __name__ == "__main__":
-    agent_loop()
+    main()

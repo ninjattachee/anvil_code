@@ -1,14 +1,10 @@
-import importlib.util
+import importlib
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-MODULE_PATH = Path(__file__).with_name("run_python_file.py")
-SPEC = importlib.util.spec_from_file_location("run_python_file_module", MODULE_PATH)
-assert SPEC is not None and SPEC.loader is not None
-run_python_file_module = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(run_python_file_module)
+run_python_file_module = importlib.import_module("anvil_code.functions.run_python_file")
 run_python_file = run_python_file_module.run_python_file
 
 

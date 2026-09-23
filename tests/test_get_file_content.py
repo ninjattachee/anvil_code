@@ -1,15 +1,11 @@
-import importlib.util
+import importlib
 import os
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-MODULE_PATH = Path(__file__).with_name("get_file_content.py")
-SPEC = importlib.util.spec_from_file_location("get_file_content_module", MODULE_PATH)
-assert SPEC is not None and SPEC.loader is not None
-get_file_content_module = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(get_file_content_module)
+get_file_content_module = importlib.import_module("anvil_code.functions.get_file_content")
 get_file_content = get_file_content_module.get_file_content
 
 

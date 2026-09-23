@@ -1,6 +1,6 @@
 import unittest
 
-from functions.get_files_info import get_files_info
+from anvil_code.functions.get_files_info import get_files_info
 
 
 class TestGetFilesInfo(unittest.TestCase):
