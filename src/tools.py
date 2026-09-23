@@ -16,3 +16,66 @@ schema_get_files_info: FunctionToolParam = {
     "additionalProperties": False,
     "required": ["directory"]
 }
+
+schema_get_file_content: FunctionToolParam = {
+    "type": "function",
+    "name": "get_file_content",
+    "description": "Get the content of a file",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "file_path": {
+                "type": "string",
+                "description": "The path to the file"
+            }
+        },
+    },
+    "additionalProperties": False,
+    "required": ["file_path"]
+}
+
+schema_write_file: FunctionToolParam = {
+    "type": "function",
+    "name": "write_file",
+    "description": "Write content to a file",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "file_path": {
+                "type": "string",
+                "description": "The path to the file"
+            },
+            "content": {
+                "type": "string",
+                "description": "The content to write to the file"
+            }
+        },
+    },
+    "additionalProperties": False,
+    "required": ["file_path", "content"]
+}
+
+schema_run_python_file: FunctionToolParam = {
+    "type": "function",
+    "name": "run_python_file",
+    "description": "Run a Python file",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "file_path": {
+                "type": "string",
+                "description": "The path to the Python file"
+            },
+            "args": {
+                "type": "array",
+                "description": "The arguments to pass to the Python file",
+                "items": {
+                    "type": "string"
+                }
+            }
+
+        },
+    },
+    "additionalProperties": False,
+    "required": ["file_path"]
+}
